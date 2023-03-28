@@ -5,13 +5,12 @@ const User = mongoose.model(
   mongoose.Schema({
     username: {
       type: String,
-      required: true,
+      min:[4, "Username should be at least 4 character"],
       unique: true,
     },
     password: {
-      tyep: String,
-      required: true,
-      select: false,
+      type: String,
+      min:[6, "Password should be at least 6 character"]
     },
   })
 );
