@@ -3,6 +3,9 @@ import { authApi } from '../service/auth'
 
 export const store = configureStore({
   reducer: {
-    [authApi.reducerPath] : authApi.reducer
+    [authApi.reducerPath] : authApi.reducer,
+
   },
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(authApi.middleware),
 })
