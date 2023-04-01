@@ -1,9 +1,9 @@
-import { Outlet } from "react-router-dom"
+import { Outlet } from "react-router-dom";
+import { useLoadUserByTokenQuery } from "../../redux/service/auth";
 
 const AppLayout = () => {
-    return(
-        <Outlet/>
-    )
-}
+  const data = useLoadUserByTokenQuery(undefined);
+  return <Outlet />;
+};
 
-export default AppLayout
+export default AppLayout;

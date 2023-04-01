@@ -1,35 +1,46 @@
-import { Box, TextField, Button } from "@mui/material";
+import { Box, TextField, Button, Alert } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
+import { useSignupMutation } from "../redux/service/auth";
+import { useState } from "react";
 
 const schema = yup.object({
   username: yup.string().min(6).max(25).required(),
   password: yup.string().min(6).max(25).required(),
-  confirmpassword: yup.string().oneOf([yup.ref('password'), null], 'Passwords must match').required()
+  confirmpassword: yup
+    .string()
+    .oneOf([yup.ref("password"), null], "Passwords must match")
+    .required(),
 });
 
-
-
-
 const SignUp = () => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
+  });
 
-    
-    const {
-        register,
-        handleSubmit,
-        formState: { errors },
-      } = useForm({
-        resolver: yupResolver(schema),
-      });
-      const onSubmit = (values) => {
-        console.log(values);
-    };
-    console.log(errors);
-    return(
-        <>
+  const navigate = useNavigate();
+
+  const [errAlert, setErrAlert] = useState(true);
+
+  const [signup, { error, isLoading, isSuccess, isError }] = useSignupMutation();
+
+  const onSubmit = (values) => {
+    signup({ username: values.username, password: values.password });
+  };
+
+  if (isSuccess) {
+    navigate("/");
+  }
+
+  return (
+    <>
       <Box component={"form"} sx={{ mt: 1 }} onSubmit={handleSubmit(onSubmit)}>
         <TextField
           margin="normal"
@@ -47,7 +58,7 @@ const SignUp = () => {
           fullWidth
           id="Password"
           label="Password"
-          type={'password'}
+          type={"password"}
           {...register("password")}
           error={errors?.password && true}
           helperText={errors?.password?.message}
@@ -56,7 +67,7 @@ const SignUp = () => {
           margin="normal"
           required
           fullWidth
-          type={'password'}
+          type={"password"}
           id="confirmpassword"
           label="Confirm Password"
           {...register("confirmpassword")}
@@ -69,17 +80,28 @@ const SignUp = () => {
           color="success"
           type="submit"
           fullWidth
+          loading={isLoading}
         >
           {" "}
-          Login
+          Sign Up
         </LoadingButton>
       </Box>
       <Button component={Link} to="/login" sx={{ textTransform: "none" }}>
         {" "}
-       Already have an account? Login
+        Already have an account? Login
       </Button>
+      {isError && errAlert && (
+        <Alert
+          onClose={() => {
+            setErrAlert(false);
+          }}
+          severity="error"
+        >
+          {error?.data?.msg ?? "Something is wrong. Try chaning User Name"}
+        </Alert>
+      )}
     </>
-    )
-}
+  );
+};
 
-export default SignUp
+export default SignUp;

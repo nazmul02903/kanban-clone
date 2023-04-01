@@ -4,13 +4,21 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import registerRoute from "./routers/register.js";
 import mongoose from "mongoose";
+import multer from "multer"
 
 const app = express();
 dotEnv.config();
+const upload = multer({ dest: "./uploads" });
 
-app.use(cors());
+app.use(
+  cors({
+    origin: process.env.FRONTEND,
+    credentials: true,
+  })
+);
 app.use(cookieParser());
 app.use(express.json());
+app.use(upload.array());
 
 mongoose
   .connect(process.env.MONGODB)

@@ -3,6 +3,7 @@ import { Outlet } from "react-router-dom";
 import assets from "../../assets";
 
 const AuthLayout = () => {
+  console.log("data")
   return (
     <Container component={"main"} maxWidth="xs">
       <Box

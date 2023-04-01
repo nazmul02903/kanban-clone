@@ -9,8 +9,10 @@ export const authApi = createApi({
   }),
   endpoints: (build) => ({
     loadUserByToken: build.query({
-      query: () => `login`,
-      credentials: "include",
+      query: () => ({
+        url: `login`,
+        credentials: "include"
+      })
     }),
     login: build.mutation({
       query(body) {
@@ -22,11 +24,12 @@ export const authApi = createApi({
         };
       },
     }),
-    register: build.mutation({
+    signup: build.mutation({
       query(body) {
         return {
           url: `register`,
           method: "POST",
+          credentials: "include",
           body,
         };
       },
@@ -35,4 +38,4 @@ export const authApi = createApi({
 });
 
 
-export const { useLoadUserByTokenQuery, useLoginMutation, useRegisterMutation } = authApi;
+export const { useLoadUserByTokenQuery, useLoginMutation, useSignupMutation } = authApi;

@@ -12,6 +12,7 @@ export const register = async (req, res, nex) => {
 export const load = async (req, res, nex) => {
   try {
     const {token} = req.cookies;
+    if(!token) throw {msg: "cookie not found"}
     const user = await User.findById(token);
     res.status(200).json({user});
   } catch (error) {
