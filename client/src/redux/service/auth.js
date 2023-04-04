@@ -11,9 +11,10 @@ export const authApi = createApi({
     loadUserByToken: build.query({
       query: () => ({
         url: `login`,
-        credentials: "include"
-      })
+        credentials: "include",
+      }),
     }),
+  
     login: build.mutation({
       query(body) {
         return {
@@ -34,8 +35,15 @@ export const authApi = createApi({
         };
       },
     }),
+    logout: build.mutation({
+      query: () => ({
+        url: `logout`,
+        credentials: "include",
+        method: "POST"
+      }),
+    }),
   }),
 });
 
-
-export const { useLoadUserByTokenQuery, useLoginMutation, useSignupMutation } = authApi;
+export const { useLoadUserByTokenQuery, useLoginMutation, useSignupMutation, useLogoutMutation } =
+  authApi;
