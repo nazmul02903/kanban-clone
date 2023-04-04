@@ -20,6 +20,16 @@ export const load = async (req, res, nex) => {
   }
 }
 
+export const logout = async (req, res) => {
+  try{
+    const {token} = req.cookies;
+    if(!token) throw {msg: "cookie not found"}
+    res.clearCookie("token").json({msg: "logout successful"})
+  }catch (error) {
+    res.status(500).json({error})
+  }
+}
+
 export const login = async (req, res, nex) => {
   console.log(req.body);
   try {

@@ -3,7 +3,7 @@ import {
   Drawer,
   IconButton,
   List,
-  ListItemButton,
+  ListItem,
   Toolbar,
   Typography,
 } from "@mui/material";
@@ -11,6 +11,7 @@ import assets from "../assets";
 import { useSelector } from "react-redux";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { useNavigate } from "react-router-dom";
+import AddBoxIcon from '@mui/icons-material/AddBox';
 import { useLogoutMutation } from "../redux/service/auth";
 
 const SideBar = () => {
@@ -36,7 +37,7 @@ const SideBar = () => {
           backgroundColor: assets.colors.secondary,
         }}
       >
-        <ListItemButton>
+        <ListItem>
           <Box
             sx={{
               display: "flex",
@@ -52,7 +53,6 @@ const SideBar = () => {
             >
               {user?.username}
             </Typography>
-            <Toolbar title="Log Out">
               <IconButton
                 onClick={() => {
                   logout();
@@ -61,9 +61,47 @@ const SideBar = () => {
               >
                 <LogoutIcon />
               </IconButton>
-            </Toolbar>
           </Box>
-        </ListItemButton>
+        </ListItem>
+        <ListItem>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              width: "100%",
+            }}
+          >
+            <Typography
+              variant="body2"
+              fontWeight={"700"}
+              sx={{ textTransform: "capitalize" }}
+            >
+              Favorites
+            </Typography>
+          </Box>
+        </ListItem>
+        <ListItem>
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              width: "100%",
+            }}
+          >
+            <Typography
+              variant="body2"
+              fontWeight={"700"}
+              sx={{ textTransform: "capitalize" }}
+            >
+              Private
+            </Typography>
+            <IconButton>
+              <AddBoxIcon/>
+            </IconButton>
+          </Box>
+        </ListItem>
       </List>
     </Drawer>
   );
