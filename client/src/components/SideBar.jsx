@@ -4,23 +4,29 @@ import {
   IconButton,
   List,
   ListItem,
+  ListItemButton,
   Toolbar,
   Typography,
 } from "@mui/material";
 import assets from "../assets";
 import { useSelector } from "react-redux";
 import LogoutIcon from "@mui/icons-material/Logout";
-import { useNavigate } from "react-router-dom";
-import AddBoxIcon from '@mui/icons-material/AddBox';
+import { useNavigate, useParams } from "react-router-dom";
+import AddBoxIcon from "@mui/icons-material/AddBox";
 import { useLogoutMutation } from "../redux/service/auth";
+import { useGetBoardsQuery } from "../redux/service/board";
+
+import DraggableItem from "./DraggableItem";
 
 const SideBar = () => {
   const { user } = useSelector((state) => state.auth);
 
   const [logout, result] = useLogoutMutation();
+  const boards = useGetBoardsQuery("boards");
 
-  console.log(result);
   const navigate = useNavigate();
+
+
 
   return (
     <Drawer
@@ -53,14 +59,14 @@ const SideBar = () => {
             >
               {user?.username}
             </Typography>
-              <IconButton
-                onClick={() => {
-                  logout();
-                  navigate("/login");
-                }}
-              >
-                <LogoutIcon />
-              </IconButton>
+            <IconButton
+              onClick={() => {
+                logout();
+                navigate("/login");
+              }}
+            >
+              <LogoutIcon />
+            </IconButton>
           </Box>
         </ListItem>
         <ListItem>
@@ -98,10 +104,26 @@ const SideBar = () => {
               Private
             </Typography>
             <IconButton>
-              <AddBoxIcon/>
+              <AddBoxIcon />
             </IconButton>
           </Box>
         </ListItem>
+        {boards?.data?.map((board, index) => (
+          <DraggableItem board={board} />
+          // <ListItemButton key={board._id} sx={{ opacity: isDragging ? 0.5 : 1 }} ref={drag}>
+          //   <Typography
+          //     variant="body2"
+          //     fontWeight="700"
+          //     sx={{
+          //       whiteSpace: "nowrap",
+          //       overflow: "hidden",
+          //       textOverflow: "ellipsis",
+          //     }}
+          //   >
+          //     {board.icon} {board.title}
+          //   </Typography>
+          // </ListItemButton>
+        ))}
       </List>
     </Drawer>
   );

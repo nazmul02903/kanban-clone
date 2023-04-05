@@ -14,7 +14,6 @@ const AppLayout = () => {
   const navigate = useNavigate();
   const { isLoading, data, isFetching, isSuccess } =
     useLoadUserByTokenQuery(undefined);
-  console.log(data);
 
   if (!data && !isFetching) {
     navigate("/login");
