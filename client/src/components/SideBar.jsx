@@ -22,14 +22,21 @@ import { useEffect } from "react";
 
 const SideBar = () => {
   const { user } = useSelector((state) => state.auth);
+  const { items } = useSelector((state) => state.board);
   const dispatch = useDispatch();
 
   const [logout, result] = useLogoutMutation();
-  const boards = useGetBoardsQuery("boards");
+  const boards = useGetBoardsQuery("boards", {
+    onSuccess: (res) => {
+      dispatch(setBoards(res.data));
+    },
+  });
 
   const navigate = useNavigate();
 
-  console.log(boards)
+  // if(boards.isSuccess){
+  //   dispatch(setBoards(boards.data))
+  // }
 
   useEffect(() => {
     if (boards.isSuccess) {
@@ -117,8 +124,8 @@ const SideBar = () => {
             </IconButton>
           </Box>
         </ListItem>
-        {boards?.data?.map((board, index) => (
-          <DraggableItem key={index} board={board} index={index} />
+        {items?.map((board, index) => (
+          <DraggableItem key={board._id} board={board} index={index} />
         ))}
       </List>
     </Drawer>
