@@ -9,7 +9,7 @@ import {
   Typography,
 } from "@mui/material";
 import assets from "../assets";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import LogoutIcon from "@mui/icons-material/Logout";
 import { useNavigate, useParams } from "react-router-dom";
 import AddBoxIcon from "@mui/icons-material/AddBox";
@@ -17,16 +17,25 @@ import { useLogoutMutation } from "../redux/service/auth";
 import { useGetBoardsQuery } from "../redux/service/board";
 
 import DraggableItem from "./DraggableItem";
+import { setBoards } from "../redux/app/boardSlice";
+import { useEffect } from "react";
 
 const SideBar = () => {
   const { user } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
 
   const [logout, result] = useLogoutMutation();
   const boards = useGetBoardsQuery("boards");
 
   const navigate = useNavigate();
 
+  console.log(boards)
 
+  useEffect(() => {
+    if (boards.isSuccess) {
+      dispatch(setBoards(boards.data));
+    }
+  }, [boards.isSuccess]);
 
   return (
     <Drawer
@@ -109,20 +118,7 @@ const SideBar = () => {
           </Box>
         </ListItem>
         {boards?.data?.map((board, index) => (
-          <DraggableItem board={board} />
-          // <ListItemButton key={board._id} sx={{ opacity: isDragging ? 0.5 : 1 }} ref={drag}>
-          //   <Typography
-          //     variant="body2"
-          //     fontWeight="700"
-          //     sx={{
-          //       whiteSpace: "nowrap",
-          //       overflow: "hidden",
-          //       textOverflow: "ellipsis",
-          //     }}
-          //   >
-          //     {board.icon} {board.title}
-          //   </Typography>
-          // </ListItemButton>
+          <DraggableItem key={index} board={board} index={index} />
         ))}
       </List>
     </Drawer>
