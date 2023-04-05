@@ -3,6 +3,7 @@ import dotEnv from "dotenv";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import registerRoute from "./routers/register.js";
+import boardRoute from "./routers/board.js"
 import mongoose from "mongoose";
 import multer from "multer"
 
@@ -25,6 +26,7 @@ mongoose
   .then(() => console.log("database connected successfully"));
 
 app.use(registerRoute);
+app.use(boardRoute);
 
 app.listen(process.env.PORT, () => {
   console.log(`Server is running on ${process.env.PORT}`);

@@ -5,7 +5,7 @@ export const register = async (req, res, nex) => {
     const user = await User.create(req.body);
     res.cookie("token", user._id).status(200).json({ user });
   } catch (error) {
-    res.status(500).json({error});
+    res.status(500).json(error);
   }
 };
 
@@ -16,7 +16,7 @@ export const load = async (req, res, nex) => {
     const user = await User.findById(token);
     res.status(200).json({user});
   } catch (error) {
-    res.status(500).json({error})
+    res.status(500).json(error)
   }
 }
 
