@@ -1,23 +1,21 @@
-
-import { memo } from 'react'
-import { useDrag, useDrop } from 'react-dnd'
-
+import { ListItem } from "@mui/material";
+import { memo } from "react";
+import { useDrag, useDrop } from "react-dnd";
+import { Link } from "react-router-dom";
+import assets from "../assets";
 
 const style = {
-  border: '1px dashed gray',
-  padding: '0.5rem 1rem',
-  marginBottom: '.5rem',
-  cursor: 'move',
-}
+  border: "1px dashed gray",
+  padding: "0.3rem 1rem",
+  marginBottom: ".3rem",
+  color: "white",
+  cursor: "grab",
+  borderRadius: "5px",
+  backgroundColor: assets.colors.primary
+};
 
-
-export const DemoDrag = memo(function Card({
-  id,
-  text,
-  moveCard,
-  findCard,
-}) {
-  const originalIndex = findCard(id).index
+export const DemoDrag = memo(function Card({ id, board, moveCard, findCard }) {
+  const originalIndex = findCard(id).index;
   const [{ isDragging }, drag] = useDrag(
     () => ({
       type: "card",
@@ -26,35 +24,40 @@ export const DemoDrag = memo(function Card({
         isDragging: monitor.isDragging(),
       }),
       end: (item, monitor) => {
-        const { id: droppedId, originalIndex } = item
-        const didDrop = monitor.didDrop()
+        const { id: droppedId, originalIndex } = item;
+        const didDrop = monitor.didDrop();
         if (!didDrop) {
-          moveCard(droppedId, originalIndex)
+          moveCard(droppedId, originalIndex);
         }
       },
     }),
-    [id, originalIndex, moveCard],
-  )
+    [id, originalIndex, moveCard]
+  );
 
   const [, drop] = useDrop(
     () => ({
       accept: "card",
       hover({ id: draggedId }) {
         if (draggedId !== id) {
-          const { index: overIndex } = findCard(id)
-          moveCard(draggedId, overIndex)
+          const { index: overIndex } = findCard(id);
+          moveCard(draggedId, overIndex);
         }
       },
     }),
-    [findCard, moveCard],
-  )
+    [findCard, moveCard]
+  );
 
-  const opacity = isDragging ? 0 : 1
+  const opacity = isDragging ? 0 : 1;
   return (
-    <div ref={(node) => drag(drop(node))} style={{ ...style, opacity }}>
-      {text}
-    </div>
-  )
-})
+    <ListItem
+      component={Link}
+      to={`/board/${board._id}`}
+      ref={(node) => drag(drop(node))}
+      style={{ ...style, opacity }}
+    >
+      {board.icon} {board.title}
+    </ListItem>
+  );
+});
 
-export default DemoDrag
+export default DemoDrag;

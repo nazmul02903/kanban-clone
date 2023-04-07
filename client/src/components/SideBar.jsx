@@ -15,37 +15,33 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import { useNavigate, useParams } from "react-router-dom";
 import AddBoxIcon from "@mui/icons-material/AddBox";
 import { useLogoutMutation } from "../redux/service/auth";
-import { useGetBoardsQuery } from "../redux/service/board";
+import {
+  useCreateBoardMutation,
+  useGetBoardsQuery,
+} from "../redux/service/board";
 
-import DraggableItem from "./DraggableItem";
 import { setBoards } from "../redux/app/boardSlice";
 import { useCallback, useEffect } from "react";
 import DemoDrag from "./DemoDragItem";
 
 const SideBar = () => {
+  //selectors ---------------
   const { user } = useSelector((state) => state.auth);
   const { items } = useSelector((state) => state.board);
   const dispatch = useDispatch();
-
   const [logout, result] = useLogoutMutation();
+  const navigate = useNavigate();
+
+
+  //methods ---------------------
+  const [createBoard, { isSuccess: boardCreateSuccess, data: newBoard }] =
+    useCreateBoardMutation();
+
   const boards = useGetBoardsQuery("boards", {
     onSuccess: (res) => {
       dispatch(setBoards(res.data));
     },
   });
-
-  const navigate = useNavigate();
-
-  // if (boards.isSuccess) {
-  //   dispatch(setBoards(boards.data));
-  // }
-
-  useEffect(() => {
-    if (boards.isSuccess) {
-      dispatch(setBoards(boards.data));
-    }
-  }, [boards.isSuccess]);
-
   const findCard = useCallback(
     (id) => {
       const card = items.filter((c) => `${c._id}` === id)[0];
@@ -73,6 +69,18 @@ const SideBar = () => {
     },
     [findCard, items, setBoards]
   );
+
+
+  useEffect(() => {
+    if (boards.isSuccess) {
+      dispatch(setBoards(boards.data));
+      if (boardCreateSuccess) {
+        navigate(`/board/${newBoard._id}`);
+      }
+    }
+  }, [boards.isSuccess, boards?.data]);
+
+ 
 
   return (
     <Drawer
@@ -149,24 +157,22 @@ const SideBar = () => {
             >
               Private
             </Typography>
-            <IconButton>
+            <IconButton
+              onClick={() => {
+                createBoard();
+              }}
+            >
               <AddBoxIcon />
             </IconButton>
           </Box>
         </ListItem>
         {items?.map((board, index) => (
-          // <DraggableItem
-          //   key={board._id}
-          //   moveCard={moveCard}
-          //   findCard={findCard}
-          //   board={board}
-          // />
           <DemoDrag
             moveCard={moveCard}
             key={board._id}
             id={board._id}
             findCard={findCard}
-            text={board._id}
+            board={board}
           />
         ))}
       </List>

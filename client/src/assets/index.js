@@ -4,7 +4,8 @@ const assets = {
         
     },
     colors: {
-        secondary: '#292929'
+        secondary: '#292929',
+        primary: '#121212'
     }
 }
 

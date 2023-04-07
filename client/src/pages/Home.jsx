@@ -17,33 +17,35 @@ const Home = () => {
     navigate(`/board/${result?.data?._id}`);
   }
 
-  if (isSuccess && boardId === undefined) {
+  if (isSuccess && boardId === undefined && data.length) {
     navigate(`/board/${data[0]._id}`);
   }
 
   return (
     <>
-      isLoading ? <Loading fullHeight /> : (
-      <Box
-        sx={{
-          height: "100%",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <LoadingButton
-          loading={result.isLoading}
-          variant="outlined"
-          color="success"
-          onClick={() => {
-            createBoard();
+      {isLoading ? (
+        <Loading fullHeight />
+      ) : (
+        <Box
+          sx={{
+            height: "100%",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
           }}
         >
-          Click here to create your first board
-        </LoadingButton>
-      </Box>
-      )
+          <LoadingButton
+            loading={result.isLoading}
+            variant="outlined"
+            color="success"
+            onClick={() => {
+              createBoard();
+            }}
+          >
+            Click here to create your first board
+          </LoadingButton>
+        </Box>
+      )}
     </>
   );
 };
