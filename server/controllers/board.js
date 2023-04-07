@@ -33,3 +33,18 @@ export const getSingleBoard = async (req, res) => {
     res.status(500).json(err);
   }
 };
+
+export const updateBoard = async (req, res) => {
+  try {
+    const { boardId } = req.params;
+    const {title, description} = req.body;
+    if (title === "") req.body.title = "Untitled";
+    if (description === "") req.body.description = "Add description here";
+    const board = await Board.findByIdAndUpdate(boardId, {
+      $set: { title, description },
+    });
+    res.status(200).json(board);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+};

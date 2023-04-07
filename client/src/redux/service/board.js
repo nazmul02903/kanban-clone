@@ -6,7 +6,7 @@ export const boardApi = createApi({
     baseUrl:
       "https://3001-nazmul02903-kanbanclone-jzrj3rk6abf.ws-us93.gitpod.io",
   }),
-  tagTypes: ["board"],
+  tagTypes: ["board", "single"],
   endpoints: (build) => ({
     createBoard: build.mutation({
       query: () => ({
@@ -21,15 +21,25 @@ export const boardApi = createApi({
         url: "/",
         credentials: "include",
       }),
-      providesTags: ["board"],
+      providesTags: ["board", "single"],
     }),
     getSingleBoard: build.query({
       query : (boardId) => ({
         url: `/${boardId}`,
         credentials: "include"
-      })
+      }),
+      providesTags: ["single"]
+    }),
+    updateBoard: build.mutation({
+      query: ( body) => ({
+        url: `${body.boardId}`,
+        method: 'PUT',
+        credentials: "include",
+        body
+      }),
+      invalidatesTags: ["single"]
     })
   }),
 });
 
-export const { useGetBoardsQuery, useCreateBoardMutation, useGetSingleBoardQuery } = boardApi;
+export const { useGetBoardsQuery, useCreateBoardMutation, useGetSingleBoardQuery, useUpdateBoardMutation } = boardApi;
