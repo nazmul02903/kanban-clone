@@ -1,21 +1,22 @@
-import { ListItem } from "@mui/material";
+import { ListItem, Card } from "@mui/material";
 import { memo } from "react";
 import { useDrag, useDrop } from "react-dnd";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import assets from "../assets";
 
-const style = {
-  border: "1px dashed gray",
-  padding: "0.3rem 1rem",
-  marginBottom: ".3rem",
-  color: "white",
-  cursor: "grab",
-  borderRadius: "5px",
-  backgroundColor: assets.colors.primary
-};
 
 export const DemoDrag = memo(function Card({ id, board, moveCard, findCard }) {
   const originalIndex = findCard(id).index;
+  const {boardId} = useParams()
+  const style = {
+    // border: "1px dashed gray",
+    padding: "0.3rem 1rem",
+    marginBottom: ".3rem",
+    color: "white",
+    cursor: "grab",
+    borderRadius: "5px",
+    backgroundColor: id !== boardId ? assets.colors.primary : "gray"
+  };
   const [{ isDragging }, drag] = useDrag(
     () => ({
       type: "card",

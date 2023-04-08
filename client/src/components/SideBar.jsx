@@ -1,5 +1,7 @@
 import {
   Box,
+  Card,
+  Divider,
   Drawer,
   IconButton,
   List,
@@ -17,7 +19,9 @@ import AddBoxIcon from "@mui/icons-material/AddBox";
 import { useLogoutMutation } from "../redux/service/auth";
 import {
   useCreateBoardMutation,
+  useDeleteBoardMutation,
   useGetBoardsQuery,
+  useUpdatePositionMutation,
 } from "../redux/service/board";
 
 import { setBoards } from "../redux/app/boardSlice";
@@ -32,16 +36,17 @@ const SideBar = () => {
   const [logout, result] = useLogoutMutation();
   const navigate = useNavigate();
 
-
   //methods ---------------------
   const [createBoard, { isSuccess: boardCreateSuccess, data: newBoard }] =
     useCreateBoardMutation();
 
-  const boards = useGetBoardsQuery("boards", {
-    onSuccess: (res) => {
-      dispatch(setBoards(res.data));
-    },
-  });
+  const [updatePosition] = useUpdatePositionMutation();
+
+  const boards = useGetBoardsQuery("boards");
+
+
+
+
   const findCard = useCallback(
     (id) => {
       const card = items.filter((c) => `${c._id}` === id)[0];
@@ -56,23 +61,21 @@ const SideBar = () => {
   const moveCard = useCallback(
     (id, atIndex) => {
       const { card, index } = findCard(id);
-      dispatch(
-        setBoards(
-          update(items, {
-            $splice: [
-              [index, 1],
-              [atIndex, 0, card],
-            ],
-          })
-        )
-      );
+      const updatedArray = update(items, {
+        $splice: [
+          [index, 1],
+          [atIndex, 0, card],
+        ],
+      });
+      dispatch(setBoards(updatedArray));
+      updatePosition(updatedArray);
     },
     [findCard, items, setBoards]
   );
 
-
   useEffect(() => {
     if (boards.isSuccess) {
+      console.log("runnding");
       dispatch(setBoards(boards.data));
       if (boardCreateSuccess) {
         navigate(`/board/${newBoard._id}`);
@@ -80,7 +83,9 @@ const SideBar = () => {
     }
   }, [boards.isSuccess, boards?.data]);
 
- 
+  // useEffect(() => {
+  //   dispatch(setBoards(boards?.data));
+  // }, [boards?.data]);
 
   return (
     <Drawer
@@ -123,6 +128,7 @@ const SideBar = () => {
             </IconButton>
           </Box>
         </ListItem>
+        <Divider sx={{marginY: 1}}/>
         <ListItem>
           <Box
             sx={{
@@ -137,25 +143,7 @@ const SideBar = () => {
               fontWeight={"700"}
               sx={{ textTransform: "capitalize" }}
             >
-              Favorites
-            </Typography>
-          </Box>
-        </ListItem>
-        <ListItem>
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              width: "100%",
-            }}
-          >
-            <Typography
-              variant="body2"
-              fontWeight={"700"}
-              sx={{ textTransform: "capitalize" }}
-            >
-              Private
+              Boards
             </Typography>
             <IconButton
               onClick={() => {
@@ -167,13 +155,13 @@ const SideBar = () => {
           </Box>
         </ListItem>
         {items?.map((board, index) => (
-          <DemoDrag
-            moveCard={moveCard}
-            key={board._id}
-            id={board._id}
-            findCard={findCard}
-            board={board}
-          />
+            <DemoDrag
+              moveCard={moveCard}
+              key={board._id}
+              id={board._id}
+              findCard={findCard}
+              board={board}
+            />
         ))}
       </List>
     </Drawer>

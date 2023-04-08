@@ -6,24 +6,20 @@ import {
 } from "../redux/service/board";
 import { useNavigate, useParams } from "react-router-dom";
 import Loading from "../components/Loading";
+import { useEffect } from "react";
 
 const Home = () => {
-  const { data, isSuccess, isLoading } = useGetBoardsQuery("board");
   const [createBoard, result] = useCreateBoardMutation();
-  const { boardId } = useParams();
   const navigate = useNavigate();
 
-  if (result.isSuccess) {
-    navigate(`/board/${result?.data?._id}`);
-  }
-
-  if (isSuccess && boardId === undefined && data.length) {
-    navigate(`/board/${data[0]._id}`);
-  }
+if(result.isSuccess){
+  navigate(`/board/${result?.data?._id}`)
+  result.reset();
+}
 
   return (
     <>
-      {isLoading ? (
+      {result.isLoading ? (
         <Loading fullHeight />
       ) : (
         <Box
@@ -42,7 +38,7 @@ const Home = () => {
               createBoard();
             }}
           >
-            Click here to create your first board
+            Click here to create A New board
           </LoadingButton>
         </Box>
       )}

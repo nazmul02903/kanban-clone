@@ -24,22 +24,45 @@ export const boardApi = createApi({
       providesTags: ["board", "single"],
     }),
     getSingleBoard: build.query({
-      query : (boardId) => ({
+      query: (boardId) => ({
         url: `/${boardId}`,
-        credentials: "include"
+        credentials: "include",
       }),
-      providesTags: ["single"]
+      providesTags: ["single"],
     }),
     updateBoard: build.mutation({
-      query: ( body) => ({
+      query: (body) => ({
         url: `${body.boardId}`,
-        method: 'PUT',
+        method: "PUT",
         credentials: "include",
-        body
+        body,
       }),
-      invalidatesTags: ["single"]
-    })
+      invalidatesTags: ["single"],
+    }),
+    updatePosition: build.mutation({
+      query: (body) => ({
+        url: `/`,
+        method: "PUT",
+        credentials: "include",
+        body,
+      }),
+    }),
+    deleteBoard: build.mutation({
+      query: (boardId) => ({
+        url: `/${boardId}`,
+        method: "DELETE",
+        credentials: "include"
+      }),
+      invalidatesTags: ["board"],
+    }),
   }),
 });
 
-export const { useGetBoardsQuery, useCreateBoardMutation, useGetSingleBoardQuery, useUpdateBoardMutation } = boardApi;
+export const {
+  useGetBoardsQuery,
+  useCreateBoardMutation,
+  useGetSingleBoardQuery,
+  useUpdateBoardMutation,
+  useUpdatePositionMutation,
+  useDeleteBoardMutation
+} = boardApi;
