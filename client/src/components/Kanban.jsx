@@ -10,13 +10,23 @@ import {
 import AddBoxIcon from "@mui/icons-material/AddBox";
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
 import { useParams } from "react-router-dom";
-import { useCreateSectionMutation } from "../redux/service/board";
+import {
+  useCreateSectionMutation,
+  useDeleteSectionMutation,
+} from "../redux/service/board";
+import { LoadingButton } from "@mui/lab";
+import { useState } from "react";
+import SingleSection from "./SingleSec";
+
 
 const Kanban = ({ sections }) => {
-  console.log(sections, "sections");
-  const [createSection, result] = useCreateSectionMutation();
-  console.log(result);
+  const [secTitle, setSecTitle] = useState("");
+
+  const [createSection, { isLoading: createSectionLoading }] =
+    useCreateSectionMutation();
+  const [deleteSection] = useDeleteSectionMutation();
   const { boardId } = useParams();
+
 
   return (
     <>
@@ -27,11 +37,15 @@ const Kanban = ({ sections }) => {
           justifyContent: "space-between",
         }}
       >
-        <Button onClick={() => createSection(boardId)} size="small">
+        <LoadingButton
+          loading={createSectionLoading}
+          onClick={() => createSection(boardId)}
+          size="small"
+        >
           Add Section
-        </Button>
+        </LoadingButton>
         <Typography variant="body2" fontWeight="700">
-          5 sections
+          {sections?.length} section(s)
         </Typography>
       </Box>
       <Divider sx={{ marginY: 1 }} />
@@ -115,53 +129,9 @@ const Kanban = ({ sections }) => {
             <Typography>UNtitled</Typography>
           </Card>
         </div>
-        {sections?.map((section) => (
-          <div key={section._id} style={{ width: "300px" }}>
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-                marginBottom: "10px",
-              }}
-            >
-              <TextField
-                placeholder="Untitled"
-                value={section?.title}
-                variant="outlined"
-                sx={{
-                  flexGrow: 1,
-                  "& .MuiOutlinedInput-input": { padding: 0 },
-                  "& .MuiOutlinedInput-notchedOutline": { border: "unset " },
-                  "& .MuiOutlinedInput-root": {
-                    fontSize: "1rem",
-                    fontWeight: "700",
-                  },
-                }}
-              />
-              <IconButton
-                variant="outlined"
-                size="small"
-                sx={{
-                  color: "gray",
-                  "&:hover": { color: "green" },
-                }}
-              >
-                <AddBoxIcon />
-              </IconButton>
-              <IconButton
-                variant="outlined"
-                size="small"
-                sx={{
-                  color: "gray",
-                  "&:hover": { color: "red" },
-                }}
-              >
-                <DeleteOutlinedIcon />
-              </IconButton>
-            </Box>
-          </div>
-        ))}
+        {sections?.map((section) => {
+          return <SingleSection key={section._id} section={section} />;
+        })}
       </Box>
     </>
   );

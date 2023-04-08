@@ -63,6 +63,24 @@ export const boardApi = createApi({
       }),
       invalidatesTags: ["single"],
     }),
+    deleteSection: build.mutation({
+      query: (sectionId) => ({
+        url: `/section/${sectionId}`,
+        method: "DELETE",
+        credentials: "include",
+      }),
+      invalidatesTags: ["single"],
+    }),
+    updateSection: build.mutation({
+      query: (sectionId, body) => ({
+        url: `/section/${sectionId}`,
+        method: "PUT",
+        credentials: "include",
+        body
+      }),
+      invalidatesTags: ["single"]
+    })
+    
   }),
 });
 
@@ -73,5 +91,6 @@ export const {
   useUpdateBoardMutation,
   useUpdatePositionMutation,
   useDeleteBoardMutation,
-  useCreateSectionMutation
+  useCreateSectionMutation,
+  useDeleteSectionMutation
 } = boardApi;
