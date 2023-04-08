@@ -55,6 +55,14 @@ export const boardApi = createApi({
       }),
       invalidatesTags: ["board"],
     }),
+    createSection: build.mutation({
+      query: (boardId) => ({
+        url: `/${boardId}/section`,
+        method: "POST",
+        credentials: "include",
+      }),
+      invalidatesTags: ["single"],
+    }),
   }),
 });
 
@@ -64,5 +72,6 @@ export const {
   useGetSingleBoardQuery,
   useUpdateBoardMutation,
   useUpdatePositionMutation,
-  useDeleteBoardMutation
+  useDeleteBoardMutation,
+  useCreateSectionMutation
 } = boardApi;

@@ -15,7 +15,7 @@ let timer;
 const timeout = 700;
 const Board = () => {
   const { boardId } = useParams();
-  const { data, isSuccess: dataSuccess } = useGetSingleBoardQuery(boardId);
+  const { data:board, isSuccess: dataSuccess } = useGetSingleBoardQuery(boardId);
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
   const navigate = useNavigate();
@@ -46,9 +46,9 @@ const Board = () => {
   };
 
   useEffect(() => {
-    setTitle(data?.title);
-    setDesc(data?.description);
-  }, [data]);
+    setTitle(board?.title);
+    setDesc(board?.description);
+  }, [board]);
 
   if (delSuccess) {
     navigate("/");
@@ -110,7 +110,7 @@ const Board = () => {
           />
         </Box>
         <Box>
-          <Kanban />
+          <Kanban sections={board?.sections ?? []} />
         </Box>
       </Box>
     </>

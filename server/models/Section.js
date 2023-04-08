@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-export default mongoose.model("Section", mongoose.Schema({
+const Section =  mongoose.model("Section", mongoose.Schema({
     board: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Board",
@@ -8,6 +8,8 @@ export default mongoose.model("Section", mongoose.Schema({
     },
     title: {
         type: String,
-        default: ''
+        default: 'UNtitled'
     }
 }))
+
+export default Section

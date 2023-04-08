@@ -4,6 +4,7 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import registerRoute from "./routers/register.js";
 import boardRoute from "./routers/board.js"
+import sectionRoute from "./routers/section.js"
 import mongoose from "mongoose";
 import multer from "multer"
 
@@ -27,6 +28,7 @@ mongoose
 
 app.use(registerRoute);
 app.use(boardRoute);
+app.use(sectionRoute);
 
 app.listen(process.env.PORT, () => {
   console.log(`Server is running on ${process.env.PORT}`);

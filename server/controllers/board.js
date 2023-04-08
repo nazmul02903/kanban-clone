@@ -1,4 +1,5 @@
 import Board from "../models/Board.js";
+import Section from "../models/Section.js";
 
 export const createBoard = async (req, res) => {
   try {
@@ -16,6 +17,7 @@ export const createBoard = async (req, res) => {
 export const getAllBoard = async (req, res) => {
   try {
     const boards = await Board.find({ user: req.user._id }).sort("-position");
+
     res.status(200).json(boards);
   } catch (err) {
     res.status(500).json(err);
@@ -25,9 +27,9 @@ export const getAllBoard = async (req, res) => {
 export const getSingleBoard = async (req, res) => {
   try {
     const { boardId: _id } = req.params;
-    console.log(_id);
     const board = await Board.findOne({ user: req.user._id, _id });
-
+    const sections = await Section.find({ board: _id });
+    board._doc.sections = sections
     res.status(200).json(board);
   } catch (err) {
     res.status(500).json(err);
@@ -54,25 +56,22 @@ export const deleteBoard = async (req, res) => {
     const { boardId } = req.params;
     console.log(boardId);
     await Board.findByIdAndDelete(boardId);
-    
-    const boards = await Board.find().sort('position')
+
+    const boards = await Board.find().sort("position");
     for (const key in boards) {
-      const board = boards[key]
-      await Board.findByIdAndUpdate(
-        board.id,
-        { $set: { position: key } }
-      )
+      const board = boards[key];
+      await Board.findByIdAndUpdate(board.id, { $set: { position: key } });
     }
-    res.status(200).json('deleted');
+    res.status(200).json("deleted");
   } catch (err) {
-    console.log(err)
+    console.log(err);
     res.status(500).json(err);
   }
 };
 
 export const updatePosition = async (req, res) => {
   try {
-    const boards = req.body
+    const boards = req.body;
     for (const key in boards.reverse()) {
       const board = boards[key];
       await Board.findByIdAndUpdate(board._id, { $set: { position: key } });
