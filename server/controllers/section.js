@@ -1,4 +1,5 @@
 import Section from "../models/Section.js";
+import Task from "../models/Task.js";
 
 export const createSection = async (req, res) => {
   const { boardId } = req.params;
@@ -15,6 +16,7 @@ export const deleteSection = async (req, res) => {
   const { sectionId } = req.params;
 
   try {
+    await Task.deleteMany({ section: sectionId })
     await Section.findByIdAndDelete(sectionId);
     res.status(200).json("deleted");
   } catch (error) {

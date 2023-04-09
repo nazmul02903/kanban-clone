@@ -8,7 +8,7 @@ const Task =  mongoose.model("Task", mongoose.Schema({
     },
     title: {
         type: String,
-        default: ''
+        default: 'Untitled'
     },
     content: {
         type: String,

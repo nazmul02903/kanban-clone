@@ -59,9 +59,13 @@ export const updateBoard = async (req, res) => {
 };
 
 export const deleteBoard = async (req, res) => {
+  const { boardId } = req.params;
   try {
-    const { boardId } = req.params;
-    console.log(boardId);
+    const sections = await Section.find({ board: boardId });
+    for (const section of sections) {
+      await Task.deleteMany({ section: section.id });
+    }
+    await Section.deleteMany({ board: boardId });
     await Board.findByIdAndDelete(boardId);
 
     const boards = await Board.find().sort("position");

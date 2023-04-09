@@ -78,8 +78,6 @@ const Board = () => {
       </Box>
       <Box sx={{ padding: "10px 50px" }}>
         <Box>
-          {/* emoji picker */}
-          {/* <EmojiPicker icon={icon} onChange={onIconChange} /> */}
           <TextField
             value={title}
             onChange={updateTitle}

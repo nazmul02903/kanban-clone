@@ -2,7 +2,7 @@ import { Card, Typography } from "@mui/material";
 import TaskModal from "./TaskModal";
 import { useState } from "react";
 
-const SingleTask = () => {
+const SingleTask = ({ task }) => {
   const [open, setOpen] = useState(false);
   const handleClose = () => setOpen(false);
   const handleOpen = () => setOpen(true);
@@ -16,9 +16,9 @@ const SingleTask = () => {
         }}
         onClick={handleOpen}
       >
-        <Typography>UNtitled</Typography>
+        <Typography>{task?.title}</Typography>
       </Card>
-      <TaskModal open={open} handleClose={handleClose} />
+      <TaskModal task={task} open={open} handleClose={handleClose} />
     </>
   );
 };

@@ -93,7 +93,7 @@ const SingleSection = ({ section }) => {
         </IconButton>
       </Box>
       {section?.tasks &&
-        section.tasks.map((task) => <SingleTask key={task._id} />)}
+        section.tasks.map((task) => <SingleTask task={task} key={task._id} />)}
     </div>
   );
 };

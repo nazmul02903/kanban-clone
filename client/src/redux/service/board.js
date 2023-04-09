@@ -51,7 +51,7 @@ export const boardApi = createApi({
       query: (boardId) => ({
         url: `/${boardId}`,
         method: "DELETE",
-        credentials: "include"
+        credentials: "include",
       }),
       invalidatesTags: ["board"],
     }),
@@ -72,23 +72,39 @@ export const boardApi = createApi({
       invalidatesTags: ["single"],
     }),
     updateSection: build.mutation({
-      query: ({sectionId, title}) => ({
+      query: ({ sectionId, title }) => ({
         url: `/section/${sectionId}`,
         method: "PUT",
         credentials: "include",
-        body: {title: title}
+        body: { title: title },
       }),
-      invalidatesTags: ["single"]
+      invalidatesTags: ["single"],
     }),
-    createTask : build.mutation({
+    createTask: build.mutation({
       query: (sectionId) => ({
-        url: `/task/${sectionId}`,
+        url: `/${sectionId}/task`,
         method: "POST",
-        credentials: "include"
+        credentials: "include",
       }),
-      invalidatesTags: ["single"]
-    })
-    
+      invalidatesTags: ["single"],
+    }),
+    updateTask: build.mutation({
+      query: ({taskId, title, content}) => ({
+        url: `/task/${taskId}`,
+        method: "PUT",
+        credentials: "include",
+        body: {title, content}
+      }),
+      invalidatesTags: ["single"],
+    }),
+    deleteTask: build.mutation({
+      query: (taskId) => ({
+        url: `/task/${taskId}`,
+        method: "DELETE",
+        credentials: "include",
+      }),
+      invalidatesTags: ["single"],
+    }),
   }),
 });
 
@@ -102,5 +118,7 @@ export const {
   useCreateSectionMutation,
   useDeleteSectionMutation,
   useUpdateSectionMutation,
-  useCreateTaskMutation
+  useCreateTaskMutation,
+  useUpdateTaskMutation,
+  useDeleteTaskMutation
 } = boardApi;

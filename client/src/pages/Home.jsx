@@ -1,25 +1,29 @@
 import { Box } from "@mui/material";
 import { LoadingButton } from "@mui/lab";
-import {
-  useCreateBoardMutation,
-  useGetBoardsQuery,
-} from "../redux/service/board";
+import { useCreateBoardMutation } from "../redux/service/board";
 import { useNavigate, useParams } from "react-router-dom";
 import Loading from "../components/Loading";
 import { useEffect } from "react";
 
 const Home = () => {
-  const [createBoard, result] = useCreateBoardMutation();
+  const [createBoard, { reset, isSuccess: createSuccess, data: createData, isLoading }] =
+    useCreateBoardMutation();
   const navigate = useNavigate();
 
-if(result.isSuccess){
-  navigate(`/board/${result?.data?._id}`)
-  result.reset();
-}
+  if (createSuccess) {
+    const resultId = createData?._id;
+    navigate(`/board/${resultId}`);
+  }
+
+  useEffect(() => {
+    return () => {
+      reset();
+    };
+  }, [reset]);
 
   return (
     <>
-      {result.isLoading ? (
+      {isLoading ? (
         <Loading fullHeight />
       ) : (
         <Box
@@ -31,7 +35,7 @@ if(result.isSuccess){
           }}
         >
           <LoadingButton
-            loading={result.isLoading}
+            loading={isLoading}
             variant="outlined"
             color="success"
             onClick={() => {

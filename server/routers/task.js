@@ -1,9 +1,13 @@
-import express from "express"
+import express from "express";
 import isAuthenticated from "../middlewares/isAuthenticated.js";
-import { createTask } from "../controllers/task.js";
+import { createTask, deleteTask, updateTask } from "../controllers/task.js";
 
-const router = express.Router()
+const router = express.Router();
 
-router.route("/task/:sectionId").post(isAuthenticated, createTask)
+router.route("/:sectionId/task").post(isAuthenticated, createTask);
+router
+  .route("/task/:taskId")
+  .put(isAuthenticated, updateTask)
+  .delete(isAuthenticated, deleteTask);
 
-export default router
+export default router;
