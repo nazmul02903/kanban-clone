@@ -9,8 +9,13 @@ import {
 } from "@mui/material";
 import AddBoxIcon from "@mui/icons-material/AddBox";
 import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
-import { useState } from "react";
-import { useDeleteSectionMutation } from "../redux/service/board";
+import { useEffect, useState } from "react";
+import {
+  useCreateTaskMutation,
+  useDeleteSectionMutation,
+  useUpdateSectionMutation,
+} from "../redux/service/board";
+import SingleTask from "./Singletask";
 
 let timer;
 const timeout = 700;
@@ -18,12 +23,22 @@ const timeout = 700;
 const SingleSection = ({ section }) => {
   const [secTitle, setSecTitle] = useState("");
   const [deleteSection] = useDeleteSectionMutation();
+  const [updateSection] = useUpdateSectionMutation();
+  const [createTask] = useCreateTaskMutation();
 
-  const updateSection = (event, sectionId) => {
+  const updateSec = (event) => {
     clearTimeout(timer);
+    const newVal = event.target.value;
+    setSecTitle(newVal);
 
-    const timer = setTimeout(() => {});
+    timer = setTimeout(() => {
+      updateSection({ sectionId: section._id, title: newVal });
+    }, timeout);
   };
+
+  useEffect(() => {
+    setSecTitle(section.title);
+  }, [section]);
   return (
     <div key={section._id} style={{ width: "300px" }}>
       <Box
@@ -32,11 +47,13 @@ const SingleSection = ({ section }) => {
           alignItems: "center",
           justifyContent: "space-between",
           marginBottom: "10px",
+          width: "300px"
         }}
       >
         <TextField
           placeholder="Untitled"
-          value={section?.title}
+          value={secTitle}
+          onChange={updateSec}
           variant="outlined"
           sx={{
             flexGrow: 1,
@@ -55,6 +72,9 @@ const SingleSection = ({ section }) => {
             color: "gray",
             "&:hover": { color: "green" },
           }}
+          onClick={() => {
+            createTask(section._id);
+          }}
         >
           <AddBoxIcon />
         </IconButton>
@@ -72,6 +92,8 @@ const SingleSection = ({ section }) => {
           <DeleteOutlinedIcon />
         </IconButton>
       </Box>
+      {section?.tasks &&
+        section.tasks.map((task) => <SingleTask key={task._id} />)}
     </div>
   );
 };

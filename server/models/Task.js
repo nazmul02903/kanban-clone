@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-export default mongoose.model("Task", mongoose.Schema({
+const Task =  mongoose.model("Task", mongoose.Schema({
     section: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Section",
@@ -18,3 +18,5 @@ export default mongoose.model("Task", mongoose.Schema({
         type: Number
     }
 }))
+
+export default Task

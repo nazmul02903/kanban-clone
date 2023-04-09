@@ -1,5 +1,6 @@
 import Board from "../models/Board.js";
 import Section from "../models/Section.js";
+import Task from "../models/Task.js";
 
 export const createBoard = async (req, res) => {
   try {
@@ -29,7 +30,13 @@ export const getSingleBoard = async (req, res) => {
     const { boardId: _id } = req.params;
     const board = await Board.findOne({ user: req.user._id, _id });
     const sections = await Section.find({ board: _id });
-    board._doc.sections = sections
+    for (const section of sections) {
+      const tasks = await Task.find({ section: section.id })
+        .populate("section")
+        .sort("-position");
+      section._doc.tasks = tasks;
+    }
+    board._doc.sections = sections;
     res.status(200).json(board);
   } catch (err) {
     res.status(500).json(err);

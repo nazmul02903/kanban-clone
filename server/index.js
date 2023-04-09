@@ -3,10 +3,11 @@ import dotEnv from "dotenv";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import registerRoute from "./routers/register.js";
-import boardRoute from "./routers/board.js"
-import sectionRoute from "./routers/section.js"
+import boardRoute from "./routers/board.js";
+import sectionRoute from "./routers/section.js";
+import taskRoute from "./routers/task.js";
 import mongoose from "mongoose";
-import multer from "multer"
+import multer from "multer";
 
 const app = express();
 dotEnv.config();
@@ -29,6 +30,7 @@ mongoose
 app.use(registerRoute);
 app.use(boardRoute);
 app.use(sectionRoute);
+app.use(taskRoute);
 
 app.listen(process.env.PORT, () => {
   console.log(`Server is running on ${process.env.PORT}`);
