@@ -37,7 +37,7 @@ export const boardApi = createApi({
         credentials: "include",
         body,
       }),
-      invalidatesTags: ["single"],
+      // invalidatesTags: ["single"],
     }),
     updatePosition: build.mutation({
       query: (body) => ({
@@ -78,7 +78,7 @@ export const boardApi = createApi({
         credentials: "include",
         body: { title: title },
       }),
-      invalidatesTags: ["single"],
+      // invalidatesTags: ["single"],
     }),
     createTask: build.mutation({
       query: (sectionId) => ({

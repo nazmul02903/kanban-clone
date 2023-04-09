@@ -75,7 +75,6 @@ const SideBar = () => {
 
   useEffect(() => {
     if (boards.isSuccess) {
-      console.log("runnding");
       dispatch(setBoards(boards.data));
       if (boardCreateSuccess) {
         navigate(`/board/${newBoard._id}`);

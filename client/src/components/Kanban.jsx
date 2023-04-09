@@ -17,13 +17,22 @@ import {
 import { LoadingButton } from "@mui/lab";
 import SingleSection from "./SingleSec";
 
-import "../assets/customScroll.css"
+import "../assets/customScroll.css";
+import { useEffect } from "react";
+import { setSections } from "../redux/app/boardSlice";
+import { useDispatch, useSelector } from "react-redux";
 
-const Kanban = ({ sections }) => {
+const Kanban = ({ sections: savedSection }) => {
   const [createSection, { isLoading: createSectionLoading }] =
     useCreateSectionMutation();
-  const [deleteSection] = useDeleteSectionMutation();
   const { boardId } = useParams();
+  const dispatch = useDispatch();
+
+  const { sections } = useSelector((state) => state.board);
+
+  useEffect(() => {
+    dispatch(setSections(savedSection));
+  }, [savedSection]);
 
   return (
     <>

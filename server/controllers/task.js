@@ -3,7 +3,7 @@ import Task from "../models/Task.js";
 export const createTask = async (req, res) => {
   const { sectionId } = req.params;
   try {
-    const taskCount = await Task.find({ section: sectionId });
+    const taskCount = await Task.find({ section: sectionId }).count();
     const task = await Task.create({
       section: sectionId,
       position: taskCount > 0 ? taskCount : 0,

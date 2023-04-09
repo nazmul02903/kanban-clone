@@ -15,10 +15,14 @@ let timer;
 const timeout = 700;
 const Board = () => {
   const { boardId } = useParams();
-  const { data:board, isSuccess: dataSuccess } = useGetSingleBoardQuery(boardId);
+  const { data: board, isSuccess: dataSuccess } = useGetSingleBoardQuery(
+    boardId,
+    { refetchOnMountOrArgChange: true }
+  );
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
   const navigate = useNavigate();
+ 
 
   const [updateBoard, result] = useUpdateBoardMutation();
   const [deleteBoard, { isSuccess: delSuccess }] = useDeleteBoardMutation();
@@ -54,6 +58,8 @@ const Board = () => {
     navigate("/");
   }
 
+
+
   return (
     <>
       <Box
@@ -65,7 +71,6 @@ const Board = () => {
           width: "100%",
         }}
       >
-      
         <IconButton
           variant="outlined"
           color="error"
