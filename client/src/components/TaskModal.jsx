@@ -35,7 +35,6 @@ let timer;
 const timeout = 700;
 
 const TaskModal = ({ open, handleClose, task }) => {
-  console.log(task);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
 

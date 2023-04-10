@@ -39,6 +39,9 @@ const SingleSection = ({ section }) => {
   useEffect(() => {
     setSecTitle(section.title);
   }, [section]);
+
+
+
   return (
     <div key={section._id} style={{ width: "300px" }}>
       <Box
@@ -93,7 +96,7 @@ const SingleSection = ({ section }) => {
         </IconButton>
       </Box>
       {section?.tasks &&
-        section.tasks.map((task) => <SingleTask task={task} key={task._id} />)}
+        section.tasks.map((task, index) => <SingleTask task={task} key={task._id} index={index} />)}
     </div>
   );
 };

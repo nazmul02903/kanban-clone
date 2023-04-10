@@ -19,8 +19,11 @@ export const createTask = async (req, res) => {
 export const deleteTask = async (req, res) => {
   const { taskId } = req.params;
   try {
+    const currentTask = await Task.findById(taskId);
     await Task.findByIdAndDelete(taskId);
-    const tasks = await Task.find().sort("position");
+    const tasks = await Task.find({ section: currentTask.section }).sort(
+      "position"
+    );
     for (const key in tasks) {
       const board = tasks[key];
       await Task.findByIdAndUpdate(board.id, { $set: { position: key } });

@@ -4,10 +4,9 @@ import { useDrag, useDrop } from "react-dnd";
 import { Link, useParams } from "react-router-dom";
 import assets from "../assets";
 
-
 export const DemoDrag = memo(function Card({ id, board, moveCard, findCard }) {
   const originalIndex = findCard(id).index;
-  const {boardId} = useParams()
+  const { boardId } = useParams();
   const style = {
     // border: "1px dashed gray",
     padding: "0.3rem 1rem",
@@ -15,7 +14,7 @@ export const DemoDrag = memo(function Card({ id, board, moveCard, findCard }) {
     color: "white",
     cursor: "grab",
     borderRadius: "5px",
-    backgroundColor: id !== boardId ? assets.colors.primary : "gray"
+    backgroundColor: id !== boardId ? assets.colors.primary : "gray",
   };
   const [{ isDragging }, drag] = useDrag(
     () => ({
@@ -32,7 +31,7 @@ export const DemoDrag = memo(function Card({ id, board, moveCard, findCard }) {
         }
       },
     }),
-    [id, originalIndex, moveCard]
+    [id]
   );
 
   const [, drop] = useDrop(
@@ -45,7 +44,7 @@ export const DemoDrag = memo(function Card({ id, board, moveCard, findCard }) {
         }
       },
     }),
-    [findCard, moveCard]
+    [moveCard]
   );
 
   const opacity = isDragging ? 0 : 1;
