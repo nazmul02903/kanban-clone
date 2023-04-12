@@ -16,6 +16,7 @@ import {
   useUpdateSectionMutation,
 } from "../redux/service/board";
 import SingleTask from "./Singletask";
+import { Droppable } from "react-beautiful-dnd";
 
 let timer;
 const timeout = 700;
@@ -40,64 +41,74 @@ const SingleSection = ({ section }) => {
     setSecTitle(section.title);
   }, [section]);
 
-
-
   return (
-    <div key={section._id} style={{ width: "300px" }}>
-      <Box
-        sx={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          marginBottom: "10px",
-          width: "300px"
-        }}
-      >
-        <TextField
-          placeholder="Untitled"
-          value={secTitle}
-          onChange={updateSec}
-          variant="outlined"
-          sx={{
-            flexGrow: 1,
-            "& .MuiOutlinedInput-input": { padding: 0 },
-            "& .MuiOutlinedInput-notchedOutline": { border: "unset " },
-            "& .MuiOutlinedInput-root": {
-              fontSize: "1rem",
-              fontWeight: "700",
-            },
-          }}
-        />
-        <IconButton
-          variant="outlined"
-          size="small"
-          sx={{
-            color: "gray",
-            "&:hover": { color: "green" },
-          }}
-          onClick={() => {
-            createTask(section._id);
-          }}
+    <Droppable key={section._id} droppableId={section._id}>
+      {(provided) => (
+        <div
+          ref={provided.innerRef}
+          {...provided.droppableProps}
+          key={section._id}
+          style={{ width: "300px" }}
         >
-          <AddBoxIcon />
-        </IconButton>
-        <IconButton
-          size="small"
-          variant="outlined"
-          sx={{
-            color: "gray",
-            "&:hover": { color: "red" },
-          }}
-          onClick={() => {
-            deleteSection(section?._id);
-          }}
-        >
-          <DeleteOutlinedIcon />
-        </IconButton>
-      </Box>
-      {section?.tasks &&
-        section.tasks.map((task, index) => <SingleTask task={task} key={task._id} index={index} />)}
-    </div>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              marginBottom: "10px",
+              width: "300px",
+            }}
+          >
+            <TextField
+              placeholder="Untitled"
+              value={secTitle}
+              onChange={updateSec}
+              variant="outlined"
+              sx={{
+                flexGrow: 1,
+                "& .MuiOutlinedInput-input": { padding: 0 },
+                "& .MuiOutlinedInput-notchedOutline": { border: "unset " },
+                "& .MuiOutlinedInput-root": {
+                  fontSize: "1rem",
+                  fontWeight: "700",
+                },
+              }}
+            />
+            <IconButton
+              variant="outlined"
+              size="small"
+              sx={{
+                color: "gray",
+                "&:hover": { color: "green" },
+              }}
+              onClick={() => {
+                createTask(section._id);
+              }}
+            >
+              <AddBoxIcon />
+            </IconButton>
+            <IconButton
+              size="small"
+              variant="outlined"
+              sx={{
+                color: "gray",
+                "&:hover": { color: "red" },
+              }}
+              onClick={() => {
+                deleteSection(section?._id);
+              }}
+            >
+              <DeleteOutlinedIcon />
+            </IconButton>
+          </Box>
+          {section?.tasks &&
+            section.tasks.map((task, index) => (
+              <SingleTask task={task} key={task._id} index={index} />
+            ))}
+            {provided.placeholder}
+        </div>
+      )}
+    </Droppable>
   );
 };
 

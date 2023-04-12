@@ -21,6 +21,7 @@ import "../assets/customScroll.css";
 import { useEffect } from "react";
 import { setSections } from "../redux/app/boardSlice";
 import { useDispatch, useSelector } from "react-redux";
+import { DragDropContext } from "react-beautiful-dnd";
 
 const Kanban = ({ sections: savedSection }) => {
   const [createSection, { isLoading: createSectionLoading }] =
@@ -64,9 +65,15 @@ const Kanban = ({ sections: savedSection }) => {
           gap: 3,
         }}
       >
-        {sections?.map((section) => {
-          return <SingleSection key={section._id} section={section} />;
-        })}
+        <DragDropContext
+          onDragEnd={(source, destination) => {
+            console.log(source, destination);
+          }}
+        >
+          {sections?.map((section) => {
+            return <SingleSection key={section._id} section={section} />;
+          })}
+        </DragDropContext>
       </Box>
     </>
   );
