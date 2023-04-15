@@ -4,7 +4,7 @@ export const boardApi = createApi({
   reducerPath: "boardApi",
   baseQuery: fetchBaseQuery({
     baseUrl:
-      "https://3001-nazmul02903-kanbanclone-jzrj3rk6abf.ws-us93.gitpod.io",
+      "https://3001-nazmul02903-kanbanclone-jzrj3rk6abf.ws-us94.gitpod.io",
   }),
   tagTypes: ["board", "single"],
   endpoints: (build) => ({

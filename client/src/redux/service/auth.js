@@ -5,7 +5,8 @@ export const authApi = createApi({
   reducerPath: "authApi",
   baseQuery: fetchBaseQuery({
     baseUrl:
-      "https://3001-nazmul02903-kanbanclone-jzrj3rk6abf.ws-us93.gitpod.io/",
+      "https://3001-nazmul02903-kanbanclone-jzrj3rk6abf.ws-us94.gitpod.io/",
+      
   }),
   endpoints: (build) => ({
     loadUserByToken: build.query({
