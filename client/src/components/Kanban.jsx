@@ -1,39 +1,28 @@
-import {
-  Box,
-  Button,
-  Card,
-  Divider,
-  IconButton,
-  TextField,
-  Typography,
-} from "@mui/material";
-import AddBoxIcon from "@mui/icons-material/AddBox";
-import DeleteOutlinedIcon from "@mui/icons-material/DeleteOutlined";
+import { Box, Divider, Typography } from "@mui/material";
 import { useParams } from "react-router-dom";
 import {
   useCreateSectionMutation,
-  useDeleteSectionMutation,
+  useUpdateTaskMutation,
+  useUpdateTaskPositionMutation,
 } from "../redux/service/board";
 import { LoadingButton } from "@mui/lab";
 import SingleSection from "./SingleSec";
 
 import "../assets/customScroll.css";
 import { useEffect, useState } from "react";
-import { setSections } from "../redux/app/boardSlice";
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { DragDropContext } from "react-beautiful-dnd";
 
 const Kanban = ({ sections: savedSection }) => {
   const [createSection, { isLoading: createSectionLoading }] =
     useCreateSectionMutation();
   const { boardId } = useParams();
-  const dispatch = useDispatch();
   const [data, setData] = useState([]);
 
   const { sections } = useSelector((state) => state.board);
+  const [updateTaskPosition] = useUpdateTaskPositionMutation();
 
   useEffect(() => {
-    // dispatch(setSections(savedSection));
     setData(savedSection);
   }, [savedSection]);
 
@@ -81,8 +70,8 @@ const Kanban = ({ sections: savedSection }) => {
             const sourceCol = data[sourceColIndex];
             const destinationCol = data[destinationColIndex];
 
-            // const sourceSectionId = sourceCol._id;
-            // const destinationSectionId = destinationCol._id;
+            const sourceSectionId = sourceCol._id;
+            const destinationSectionId = destinationCol._id;
 
             let sourceTasks = [...sourceCol.tasks];
             let destinationTasks = [...destinationCol.tasks];
@@ -105,6 +94,12 @@ const Kanban = ({ sections: savedSection }) => {
                 tasks: destinationTasks,
               };
               return newData;
+            });
+            updateTaskPosition({
+              resourceList: sourceTasks,
+              destinationList: destinationTasks,
+              resourceSectionId: sourceSectionId,
+              destinationSectionId: destinationSectionId,
             });
           }}
         >

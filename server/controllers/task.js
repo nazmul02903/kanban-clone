@@ -35,6 +35,7 @@ export const deleteTask = async (req, res) => {
 };
 
 export const updateTask = async (req, res) => {
+  console.log("task")
   const { taskId } = req.params;
 
   const body = req.body;
@@ -46,6 +47,41 @@ export const updateTask = async (req, res) => {
     const task = await Task.findByIdAndUpdate(taskId, body);
     res.status(200).json(task);
   } catch (error) {
+    res.status(500).json(error);
+  }
+};
+
+export const updatePosition = async (req, res) => {
+  const {
+    resourceList,
+    destinationList,
+    resourceSectionId,
+    destinationSectionId,
+  } = req.body;
+  const resourceListReverse = resourceList.reverse();
+  const destinationListReverse = destinationList.reverse();
+  try {
+    if (resourceSectionId !== destinationSectionId) {
+      for (const key in resourceListReverse) {
+        await Task.findByIdAndUpdate(resourceListReverse[key]._id, {
+          $set: {
+            section: resourceSectionId,
+            position: key,
+          },
+        });
+      }
+    }
+    for (const key in destinationListReverse) {
+      await Task.findByIdAndUpdate(destinationListReverse[key]._id, {
+        $set: {
+          section: destinationSectionId,
+          position: key,
+        },
+      });
+    }
+    res.status(200).json("updated");
+  } catch (err) {
+    console.log(err);
     res.status(500).json(err);
   }
 };
